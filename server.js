@@ -10,17 +10,11 @@ const userRoute = require('./routes/user')
 app.use('/api/user', userRoute)
 
 // connect to mongoDB
-// mongoose.connect(process.env.DB_CONNECTION).then(() => {
-//     console.log('Database connected...')
-// }).catch((error) => {
-//     console.log(error)
-// })
-
-const dbconn = async () => {
-    const mango = await mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true })
-    if(mango) console.log("Database connected...")
-    return "Error"
-}
+mongoose.connect(process.env.DB_CONNECTION).then(() => {
+    console.log('Database connected...')
+}).catch((error) => {
+    console.log(error)
+})
 
 dbconn()
 
