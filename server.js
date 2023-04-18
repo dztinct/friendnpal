@@ -16,8 +16,6 @@ mongoose.connect(process.env.DB_CONNECTION).then(() => {
     console.log(error)
 })
 
-dbconn()
-
 const port = process.env.PORT
 
 app.listen(port || 6000, () => {
