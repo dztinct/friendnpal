@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {register, login, resetPassword, passwordResetRequest, recoveryAnswer} = require('../Controllers/AuthController')
+const {register, login, resetPassword, passwordResetRequest, recoveryAnswer} = require('../controllers/AuthController')
 
 router.post('/register', register)
 router.post('/login', login)
