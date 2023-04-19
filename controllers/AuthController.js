@@ -68,7 +68,7 @@ const passwordResetRequest = async (req, res) => {
         const user = await User.findOne({username: username})
         if(!user) return res.status(401).json({message: 'Username not found!'})
 
-        const {passcode, ...others} = user._doc
+        const {password, ...others} = user._doc
         return res.status(200).json({message: others})
     } catch (error) {
         return res.status(401).json({message: error.message})
