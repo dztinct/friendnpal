@@ -18,7 +18,7 @@ const register =  async (req, res) => {
 
     const user = new User({
         username: username,
-        password: hashedPassword,   
+        password: hashedPassword,
         recovery_question1: recovery_question1,
         answer1: answer1,
         recovery_question2: recovery_question2,
@@ -37,18 +37,18 @@ const register =  async (req, res) => {
 
 const login = async (req, res) => {
     try{
-        const {username, password} = req.body
-        
+        const {username, pwd} = req.body
+
         const {error} = loginValidation(req.body)
         if(error) return res.status(403).json({message: error.details[0].message})
 
         const user = await User.findOne({username : username})
         if(!user) return res.status(401).json({message: 'Invalid credentials!'})
 
-        const validPass = await bcrypt.compare(password, user.password)
+        const validPass = await bcrypt.compare(pwd, user.password)
         if(!validPass) return res.status(403).json({message: "Invalid credentials!"})
 
-        const {passcode, ...others} = user._doc
+        const {password, ...others} = user._doc
 
         const token = await jwt.sign({_id: user._id}, process.env.JWT_SECRET, {
             expiresIn: '1d'
@@ -62,7 +62,6 @@ const login = async (req, res) => {
 const passwordResetRequest = async (req, res) => {
     try {
         const {username} = req.body
-
         const {error} = passwordResetRequestValidation(req.body)
         if(error) return res.status(403).json({message: error.details[0].message})
 
