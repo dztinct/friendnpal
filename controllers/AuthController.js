@@ -44,7 +44,7 @@ const register =  async (req, res) => {
 
     try {
         const savedUser = await user.save()
-        res.status(201).json({message: 'Registration successfully!', data: savedUser._id})
+        res.status(201).json({message: 'Registration successful!', data: savedUser._id})
     } catch (error) {
         res.status(401).json({ message: error.message })  
     }
