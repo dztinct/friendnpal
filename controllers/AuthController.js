@@ -1,10 +1,26 @@
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
-const {registerValidation, recoveryQuestionValidation, loginValidation, passwordResetRequestValidation, recoveryAnswerValidation, resetPasswordValidation} = require('../validation')
+const {userExistsCheckValidation, registerValidation, loginValidation, passwordResetRequestValidation, recoveryAnswerValidation, resetPasswordValidation} = require('../validation')
 const jwt = require('jsonwebtoken')
 
+const existingUserCheck = async (req, res) => {
+    try{
+        const {username} = req.body
+
+        const {error} = userExistsCheckValidation(req.body)
+        if(error) return res.status(401).json(error.details[0].message)
+
+        const userExists = await User.findOne({username: username})
+        if(userExists) return res.status(403).json({message: 'Username has already been taken'})
+
+        return res.status(200).json({message: "Available!"})    
+    } catch (error) {
+        res.status(401).json({ message: error.message })  
+    }
+}
+
 const register =  async (req, res) => {
-    const {username, password} = req.body
+    const {username, password, recovery_question1, answer1, recovery_question2, answer2, recovery_question3, answer3} = req.body
 
     const {error} = registerValidation(req.body)
     if(error) return res.status(401).json(error.details[0].message)
@@ -17,42 +33,22 @@ const register =  async (req, res) => {
 
     const user = new User({
         username: username,
-        password: hashedPassword
+        password: hashedPassword,
+        recovery_question1: recovery_question1,
+        answer1: answer1,
+        recovery_question2: recovery_question2,
+        answer2: answer2,
+        recovery_question3: recovery_question3,
+        answer3: answer3
     })
 
     try {
         const savedUser = await user.save()
-        res.status(201).json({message: 'Username registered successfully!', data: savedUser._id})
+        res.status(201).json({message: 'Registration successfully!', data: savedUser._id})
     } catch (error) {
         res.status(401).json({ message: error.message })  
     }
 }
-
-const recoveryQuestion = async (req, res) => {
-    try{
-        const {username, recovery_question1, answer1, recovery_question2, answer2, recovery_question3, answer3} = req.body
-
-        const {error} = recoveryQuestionValidation(req.body)
-        if(error) return res.status(401).json(error.details[0].message)
-
-        const user = await User.findOne({username : username})
-        await User.findOneAndUpdate(user._id, {
-            recovery_question1: recovery_question1,
-            answer1: answer1,
-            recovery_question2: recovery_question2,
-            answer2: answer2,
-            recovery_question3: recovery_question3,
-            answer3: answer3
-        })
-        return res.status(200).json({message: "Registration successful!"})    
-    } catch (error) {
-        res.status(401).json({ message: error.message })  
-    }
-
-    const {error} = recoveryQuestionValidation(req.body)
-    if(error) return res.status(401).json(error.details[0].message)
-}
-
 
 const login = async (req, res) => {
     try{
@@ -130,4 +126,4 @@ const resetPassword = async(req, res) => {
     }
 }
 
-module.exports = {register, recoveryQuestion, login, resetPassword, recoveryAnswer, passwordResetRequest}
+module.exports = {existingUserCheck, register, login, resetPassword, recoveryAnswer, passwordResetRequest}

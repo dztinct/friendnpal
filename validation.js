@@ -1,16 +1,17 @@
 const Joi  = require('joi')
 
-const registerValidation = (data) => {
+
+const userExistsCheckValidation = (data) => {
     const schema = Joi.object({
         username : Joi.string().required(),
-        password: Joi.string().min(8).max(255).required()
     })
     return schema.validate(data)
 }
 
-const recoveryQuestionValidation = (data) => {
+const registerValidation = (data) => {
     const schema = Joi.object({
         username : Joi.string().required(),
+        password: Joi.string().min(8).max(255).required(),
         recovery_question1: Joi.string().max(255).required(),
         answer1: Joi.string().max(255).required(),
         recovery_question2: Joi.string().max(255).required(),
@@ -20,8 +21,6 @@ const recoveryQuestionValidation = (data) => {
     })
     return schema.validate(data)
 }
-
-
 
 const loginValidation = (data) => {
     const schema = Joi.object({
@@ -57,8 +56,8 @@ const resetPasswordValidation = (data) => {
 }
 
 module.exports = {
+    userExistsCheckValidation,
     registerValidation,
-    recoveryQuestionValidation,
     loginValidation,
     passwordResetRequestValidation,
     recoveryAnswerValidation,
