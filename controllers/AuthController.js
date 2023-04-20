@@ -13,7 +13,7 @@ const existingUserCheck = async (req, res) => {
         const userExists = await User.findOne({username: username})
         if(userExists) return res.status(403).json({message: 'Username has already been taken'})
 
-        return res.status(200).json({message: "Available!"})    
+        return res.status(200).json({message: "Username available!"})    
     } catch (error) {
         res.status(401).json({ message: error.message })  
     }
