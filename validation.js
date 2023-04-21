@@ -3,53 +3,53 @@ const Joi  = require('joi')
 
 const userExistsCheckValidation = (data) => {
     const schema = Joi.object({
-        username : Joi.string().required(),
+        username : Joi.required(),
     })
     return schema.validate(data)
 }
 
 const registerValidation = (data) => {
     const schema = Joi.object({
-        username : Joi.string().required(),
-        password: Joi.string().min(8).max(255).required(),
-        recovery_question1: Joi.string().max(255).required(),
-        answer1: Joi.string().max(255).required(),
-        recovery_question2: Joi.string().max(255).required(),
-        answer2: Joi.string().max(255).required(),
-        recovery_question3: Joi.string().max(255).required(),
-        answer3: Joi.string().max(255).required()
+        username : Joi.required(),
+        password: Joi.required(),
+        recovery_question1: Joi.required(),
+        answer1: Joi.required(),
+        recovery_question2: Joi.required(),
+        answer2: Joi.required(),
+        recovery_question3: Joi.required(),
+        answer3: Joi.required()
     })
     return schema.validate(data)
 }
 
 const loginValidation = (data) => {
     const schema = Joi.object({
-        username: Joi.string().required().min(4),
-        pwd: Joi.string().min(8).max(255).required()
+        username: Joi.required(),
+        pwd: Joi.required()
     })
     return schema.validate(data)
 }
 
 const passwordResetRequestValidation = (data) => {
     const schema = Joi.object({
-        username: Joi.string().required().min(4),
+        username: Joi.required(),
     })
     return schema.validate(data)
 }
 
 const recoveryAnswerValidation = (data) => {
     const schema = Joi.object({
-        username: Joi.string().required().min(4),
-        recovery_question: Joi.string().max(255).required(),
-        answer: Joi.string().max(255).required()
+        username: Joi.required(),
+        recovery_question: Joi.required(),
+        answer: Joi.required()
     })
     return schema.validate(data)
 }
 
 const resetPasswordValidation = (data) => {
     const schema = Joi.object({
-        username: Joi.string().required().min(4),
-        password: Joi.string().min(8).max(255).required()
+        username: Joi.required(),
+        password: Joi.required()
 
     })
     return schema.validate(data)
